@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Robot.API;
+using Robot.Repository.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddDbContext<FactoryManagementContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Robot"))
+                .LogTo(s => System.Diagnostics.Debug.WriteLine(s))
+                .EnableDetailedErrors()
+                .EnableSensitiveDataLogging();
+});
+
 
 builder.Services.AddWebAPIService();
 
