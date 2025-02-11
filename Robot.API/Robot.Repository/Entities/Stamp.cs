@@ -5,15 +5,13 @@ using System.Collections.Generic;
 
 namespace Robot.Repository.Entities;
 
-public partial class Stamp
+public partial class Stamp: BaseEntity
 {
-    public int StampId { get; set; }
-
     public string Type { get; set; }
 
     public string Size { get; set; }
 
     public string InkColor { get; set; }
 
-    public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
+    public virtual ICollection<RobotTask> Tasks { get; set; } = new List<RobotTask>();
 }

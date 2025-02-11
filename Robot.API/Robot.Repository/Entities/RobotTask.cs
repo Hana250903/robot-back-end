@@ -5,10 +5,8 @@ using System.Collections.Generic;
 
 namespace Robot.Repository.Entities;
 
-public partial class Task
+public partial class RobotTask: BaseEntity
 {
-    public int TaskId { get; set; }
-
     public DateTime StartTime { get; set; }
 
     public DateTime EndTime { get; set; }

@@ -5,10 +5,8 @@ using System.Collections.Generic;
 
 namespace Robot.Repository.Entities;
 
-public partial class Log
+public partial class Log: BaseEntity
 {
-    public int LogId { get; set; }
-
     public DateTime Timestamp { get; set; }
 
     public string Action { get; set; }
@@ -17,5 +15,5 @@ public partial class Log
 
     public int TaskId { get; set; }
 
-    public virtual Task Task { get; set; }
+    public virtual RobotTask Task { get; set; }
 }

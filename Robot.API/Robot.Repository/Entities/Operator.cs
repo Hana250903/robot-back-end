@@ -5,10 +5,8 @@ using System.Collections.Generic;
 
 namespace Robot.Repository.Entities;
 
-public partial class Operator
+public partial class Operator: BaseEntity
 {
-    public int OperatorId { get; set; }
-
     public string Name { get; set; }
 
     public string Shift { get; set; }

@@ -5,10 +5,8 @@ using System.Collections.Generic;
 
 namespace Robot.Repository.Entities;
 
-public partial class Robot
+public partial class Robot: BaseEntity
 {
-    public int RobotId { get; set; }
-
     public string Model { get; set; }
 
     public string Status { get; set; }
@@ -19,5 +17,5 @@ public partial class Robot
 
     public virtual ICollection<Maintenance> Maintenances { get; set; } = new List<Maintenance>();
 
-    public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
+    public virtual ICollection<RobotTask> Tasks { get; set; } = new List<RobotTask>();
 }
