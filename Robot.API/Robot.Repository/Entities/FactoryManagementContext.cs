@@ -30,15 +30,38 @@ public partial class FactoryManagementContext : DbContext
 
     public virtual DbSet<RobotTask> RobotTasks { get; set; }
 
+    public virtual DbSet<User> Users { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasPostgresEnum("Role", new[] { "Admin", "Employee" });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_User");
+
+            entity.ToTable("User");
+
+            entity.Property(e =>  e.Id).HasColumnName("UserID").ValueGeneratedOnAdd();
+            entity.Property(e => e.FullName).HasColumnName("FullName");
+            entity.Property(e => e.Phone).HasColumnName("Phone");
+            entity.Property(e => e.Email).HasColumnName("Email");
+            entity.Property(e => e.UserName).HasColumnName("UserName");
+            entity.Property(e => e.Password).HasColumnName("Passwork");
+            entity.Property(e => e.CodeOTPEmail).HasColumnName("CodeOTPEmail");
+            entity.Property(e => e.Role).HasColumnName("Role").HasConversion<string>();
+            entity.Property(e => e.IsDeleted).HasColumnName("IsDeleted");
+
+
+        });
+
         modelBuilder.Entity<Log>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_Log");
 
             entity.ToTable("Log");
 
-            entity.Property(e => e.Id).HasColumnName("LogID");
+            entity.Property(e => e.Id).HasColumnName("LogID").ValueGeneratedOnAdd();
             entity.Property(e => e.Timestamp).HasColumnType("timestamp with time zone").HasColumnName("TimeStamp");
             entity.Property(e => e.Action)
                 .IsRequired()
@@ -60,7 +83,7 @@ public partial class FactoryManagementContext : DbContext
 
             entity.ToTable("Maintenance");
 
-            entity.Property(e => e.Id).HasColumnName("MaintenanceID");
+            entity.Property(e => e.Id).HasColumnName("MaintenanceID").ValueGeneratedOnAdd();
             entity.Property(e => e.Date).HasColumnType("timestamp with time zone").HasColumnName("Date");
             entity.Property(e => e.Technician)
                 .IsRequired()
@@ -80,7 +103,7 @@ public partial class FactoryManagementContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK_Operator");
 
-            entity.Property(e => e.Id).HasColumnName("OperatorID");
+            entity.Property(e => e.Id).HasColumnName("OperatorID").ValueGeneratedOnAdd();
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(100)
@@ -102,7 +125,7 @@ public partial class FactoryManagementContext : DbContext
 
             entity.ToTable("Product");
 
-            entity.Property(e => e.Id).HasColumnName("ProductID");
+            entity.Property(e => e.Id).HasColumnName("ProductID").ValueGeneratedOnAdd();
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(100)
@@ -124,7 +147,7 @@ public partial class FactoryManagementContext : DbContext
 
             entity.ToTable("Robot");
 
-            entity.Property(e => e.Id).HasColumnName("RobotID");
+            entity.Property(e => e.Id).HasColumnName("RobotID").ValueGeneratedOnAdd();
             entity.Property(e => e.Model)
                 .IsRequired()
                 .HasMaxLength(50)
@@ -147,7 +170,7 @@ public partial class FactoryManagementContext : DbContext
 
             entity.ToTable("Stamp");
 
-            entity.Property(e => e.Id).HasColumnName("StampID");
+            entity.Property(e => e.Id).HasColumnName("StampID").ValueGeneratedOnAdd();
             entity.Property(e => e.Type)
                 .IsRequired()
                 .HasMaxLength(50)
@@ -167,7 +190,7 @@ public partial class FactoryManagementContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK_Tasks");
 
-            entity.Property(e => e.Id).HasColumnName("TaskID");
+            entity.Property(e => e.Id).HasColumnName("TaskID").ValueGeneratedOnAdd();
             entity.Property(e => e.StartTime).HasColumnType("timestamp with time zone").HasColumnName("StartTime");
             entity.Property(e => e.EndTime).HasColumnType("timestamp with time zone").HasColumnName("EndTime");
             entity.Property(e => e.Status)
@@ -191,6 +214,10 @@ public partial class FactoryManagementContext : DbContext
             entity.HasOne(d => d.Stamp).WithMany(p => p.Tasks)
                 .HasForeignKey(d => d.StampId)
                 .HasConstraintName("FK_Tasks_Stamp");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Tasks)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_Tasks_User");
         });
 
         OnModelCreatingPartial(modelBuilder);

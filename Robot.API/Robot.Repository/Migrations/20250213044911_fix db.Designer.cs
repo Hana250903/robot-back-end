@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Robot.Repository.Entities;
@@ -11,9 +12,11 @@ using Robot.Repository.Entities;
 namespace Robot.Repository.Migrations
 {
     [DbContext(typeof(FactoryManagementContext))]
-    partial class FactoryManagementContextModelSnapshot : ModelSnapshot
+    [Migration("20250213044911_fix db")]
+    partial class fixdb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,9 +262,6 @@ namespace Robot.Repository.Migrations
                         .HasColumnType("character varying(50)")
                         .HasColumnName("Status");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id")
                         .HasName("PK_Tasks");
 
@@ -270,8 +270,6 @@ namespace Robot.Repository.Migrations
                     b.HasIndex("RobotId");
 
                     b.HasIndex("StampId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("RobotTasks");
                 });
@@ -322,7 +320,7 @@ namespace Robot.Repository.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CodeOTPEmail")
+                    b.Property<int>("CodeOTPEmail")
                         .HasColumnType("integer")
                         .HasColumnName("CodeOTPEmail");
 
@@ -406,20 +404,11 @@ namespace Robot.Repository.Migrations
                         .HasForeignKey("StampId")
                         .HasConstraintName("FK_Tasks_Stamp");
 
-                    b.HasOne("Robot.Repository.Entities.User", "User")
-                        .WithMany("Tasks")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_Tasks_User");
-
                     b.Navigation("Product");
 
                     b.Navigation("Robot");
 
                     b.Navigation("Stamp");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Robot.Repository.Entities.Product", b =>
@@ -440,11 +429,6 @@ namespace Robot.Repository.Migrations
                 });
 
             modelBuilder.Entity("Robot.Repository.Entities.Stamp", b =>
-                {
-                    b.Navigation("Tasks");
-                });
-
-            modelBuilder.Entity("Robot.Repository.Entities.User", b =>
                 {
                     b.Navigation("Tasks");
                 });
