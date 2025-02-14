@@ -3,6 +3,10 @@ using Robot.API;
 using Robot.Repository.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
+var port = Environment.GetEnvironmentVariable("port") ?? "8080";
+builder.WebHost.UseUrls($"http://*:{port}");
+
+builder.Services.AddHealthChecks();
 
 // Add services to the container.
 
@@ -47,6 +51,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseHealthChecks("/health");
 
 app.UseCors("app-cors");
 
