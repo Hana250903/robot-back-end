@@ -10,6 +10,18 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("app-cors",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .WithExposedHeaders("X-Pagination")
+            .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddDbContext<FactoryManagementContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("Robot"))
@@ -35,5 +47,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("app-cors");
 
 app.Run();

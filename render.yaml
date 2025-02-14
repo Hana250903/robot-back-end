@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: stamping-robot
+    env: docker
+    repo: https://github.com/Hana250903/robot-back-end.git  # Thay bằng repo Git của bạn
+    branch: main  # Chọn branch cần deploy
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__Robot
+        sync: false  # Đặt thành `false` để nhập giá trị thủ công trong Render
+    region: oregon  # Có thể chọn oregon, frankfurt, singapore...
